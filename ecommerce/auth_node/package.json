@@ -27,7 +27,7 @@
         "dotenv": "5.0.1",
         "express": "4.16.3",
         "escape-html": "1.0.3",
-        "mongoose": "5.1.2",
+        "mongoose": "5.7.5",
         "node-cache": "4.2.0",
         "morgan": "1.9.1",
         "passport": "0.4.0",
