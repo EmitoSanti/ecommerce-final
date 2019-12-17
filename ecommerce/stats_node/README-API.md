@@ -14,7 +14,6 @@ Microservicio de Carrito
 	
 - [RabbitMQ](#rabbitmq)
 	- [Orden Creada](#orden-creada)
-	- [Stat Enviada](#stat-enviada)
 	
 - [RabbitMQ_GET](#rabbitmq_get)
 	- [Validación de Artículos](#validación-de-artículos)
@@ -412,35 +411,6 @@ Mensaje
 ```
 {
 "type": "order-placed",
-"message" : {
-    "cartId": "{cartId}",
-    "orderId": "{orderId}"
-    "articles": [{
-         "articleId": "{article id}"
-         "quantity" : {quantity}
-     }, ...]
-   }
-}
-```
-
-
-## <a name='stat-enviada'></a> Stat Enviada
-[Back to top](#top)
-
-<p>Consume de mensajes cart_stats desde Cart con el topic &quot;cart_stats&quot;.</p>
-
-	TOPIC stat/cart-stats
-
-
-
-
-### Success Response
-
-Mensaje
-
-```
-{
-"type": "cart_stats",
 "message" : {
     "cartId": "{cartId}",
     "orderId": "{orderId}"

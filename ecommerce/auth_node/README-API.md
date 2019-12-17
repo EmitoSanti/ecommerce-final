@@ -4,7 +4,7 @@
 Microservicio de Autentificación
 
 - [RabbitMQ_POST](#rabbitmq_post)
-	- [Invalidar Token](#invalidar-token)
+	- [Invalidar Token Cambiar a direct](#invalidar-token-cambiar-a-direct)
 	
 - [Seguridad](#seguridad)
 	- [Cambiar Password](#cambiar-password)
@@ -22,10 +22,10 @@ Microservicio de Autentificación
 
 # <a name='rabbitmq_post'></a> RabbitMQ_POST
 
-## <a name='invalidar-token'></a> Invalidar Token
+## <a name='invalidar-token-cambiar-a-direct'></a> Invalidar Token Cambiar a direct
 [Back to top](#top)
 
-<p>AuthService enviá un broadcast a todos los usuarios cuando un token ha sido invalidado. Los clientes deben eliminar de sus caches las sesiones invalidadas.</p>
+<p>AuthService enviá un broadcast a todos los usuarios cuando se logean.</p>
 
 	FANOUT auth/fanout
 
@@ -38,8 +38,8 @@ Mensaje
 
 ```
 {
-   "type": "logout",
-   "message": "{Token revocado}"
+   "type": "login",
+   "message": "{id logueado}"
 }
 ```
 

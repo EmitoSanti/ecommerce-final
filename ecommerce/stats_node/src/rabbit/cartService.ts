@@ -4,7 +4,6 @@
  *  Servicios de escucha de eventos rabbit
  */
 import * as orderPlaced from "../cart/orderPlaced";
-import * as toStats from "../cart/tostats";
 import * as validation from "../cart/validation";
 import { RabbitDirectConsumer } from "./tools/directConsumer";
 import { RabbitDirectEmitter } from "./tools/directEmitter";
@@ -21,10 +20,6 @@ interface IOrderPlacedMessage {
     cartId: string;
     orderId: string;
 }
-interface IToStatsMessage {
-    cartId: string;
-    orderId: string;
-}
 
 export function init() {
     const cart = new RabbitDirectConsumer("cart", "cart");
@@ -34,10 +29,6 @@ export function init() {
     const cart2 = new RabbitTopicConsumer("topic_cart", "sell_flow", "order_placed");
     cart2.addProcessor("order-placed", processOrderPlaced);
     cart2.init();
-
-    const cart3 = new RabbitTopicConsumer("topic_cart", "sell_flow", "cart_stats");
-    cart3.addProcessor("cart-stats", processToStats);
-    cart3.init();
 }
 
 /**
@@ -85,32 +76,6 @@ function processArticleExist(rabbitMessage: IRabbitMessage) {
 function processOrderPlaced(rabbitMessage: IRabbitMessage) {
     const placed = rabbitMessage.message as IOrderPlacedMessage;
     orderPlaced.orderPlaced(placed);
-}
-
-/**
- *
- * @api {topic} stat/cart-stats Stat Enviada
- *
- * @apiGroup RabbitMQ
- *
- * @apiDescription Consume de mensajes cart_stats desde Cart con el topic "cart_stats".
- *
- * @apiSuccessExample {json} Mensaje
- *     {
- *     "type": "cart_stats",
- *     "message" : {
- *         "cartId": "{cartId}",
- *         "orderId": "{orderId}"
- *         "articles": [{
- *              "articleId": "{article id}"
- *              "quantity" : {quantity}
- *          }, ...]
- *        }
- *     }
- */
-function processToStats(rabbitMessage: IRabbitMessage) {
-    const stat = rabbitMessage.message as IToStatsMessage;
-    toStats.toStats(stat);
 }
 
 /**

@@ -116,6 +116,10 @@ async function login(req: express.Request, res: express.Response) {
   try {
     const userId = await user.login(req.body);
     const tokenString = await token.create(userId);
+    rabbit.sendLogin(userId)
+      .catch((err) => {
+        console.error("login " + err);
+      });
     res.json({ token: tokenString });
   } catch (err) {
     error.handle(res, err);

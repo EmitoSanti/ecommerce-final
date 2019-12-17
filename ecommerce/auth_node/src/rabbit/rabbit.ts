@@ -12,6 +12,26 @@ interface IRabbitMessage {
 let channel: amqp.Channel;
 
 /**
+ * @api {fanout} auth/fanout Invalidar Token Cambiar a direct
+ * @apiGroup RabbitMQ POST
+ *
+ * @apiDescription AuthService enviá un broadcast a todos los usuarios cuando se logean.
+ *
+ * @apiSuccessExample {json} Mensaje
+ *     {
+ *        "type": "login",
+ *        "message": "{id logueado}"
+ *     }
+ */
+export function sendLogin(id: string): Promise<IRabbitMessage> {
+    console.log("sendLogin rabbit");
+    return sendMessage({
+        type: "login",
+        message: id
+    });
+}
+
+/**
  * @api {fanout} auth/fanout Invalidar Token
  * @apiGroup RabbitMQ POST
  *
