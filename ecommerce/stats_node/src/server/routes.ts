@@ -2,7 +2,7 @@
 
 import { Express } from "express";
 import * as token from "../token";
-import * as cart from "../cart";
+
 import * as error from "./error";
 import * as express from "express";
 import { NextFunction } from "connect";
@@ -74,13 +74,7 @@ function validateToken(req: IUserSessionRequest, res: express.Response, next: Ne
  * @apiUse OtherErrors
  */
 function addArticle(req: IUserSessionRequest, res: express.Response) {
-  cart.addArticle(req.user.user.id, req.body)
-    .then(cart => {
-      res.json(cart);
-    })
-    .catch(err => {
-      error.handle(res, err);
-    });
+
 }
 
 /**
@@ -110,13 +104,7 @@ function addArticle(req: IUserSessionRequest, res: express.Response) {
  * @apiUse OtherErrors
  */
 function decrementArticle(req: IUserSessionRequest, res: express.Response) {
-  cart.decrementArticle(req.user.user.id, req.body)
-    .then(cart => {
-      res.json(cart);
-    })
-    .catch(err => {
-      error.handle(res, err);
-    });
+
 }
 
 /**
@@ -147,13 +135,7 @@ function decrementArticle(req: IUserSessionRequest, res: express.Response) {
  * @apiUse OtherErrors
  */
 function incrementArticle(req: IUserSessionRequest, res: express.Response) {
-  cart.addArticle(req.user.user.id, req.body)
-    .then(cart => {
-      res.json(cart);
-    })
-    .catch(err => {
-      error.handle(res, err);
-    });
+
 }
 
 /**
@@ -177,13 +159,7 @@ function incrementArticle(req: IUserSessionRequest, res: express.Response) {
  * @apiUse OtherErrors
  */
 function getCart(req: IUserSessionRequest, res: express.Response) {
-  cart.currentCart(req.user.user.id)
-    .then(cart => {
-      res.json(cart);
-    })
-    .catch(err => {
-      error.handle(res, err);
-    });
+
 }
 
 /**
@@ -202,13 +178,7 @@ function getCart(req: IUserSessionRequest, res: express.Response) {
 function deleteArticle(req: IUserSessionRequest, res: express.Response) {
   const articleId = escape(req.params.articleId);
 
-  cart.deleteArticle(req.user.user.id, articleId)
-    .then(_ => {
-      res.send();
-    })
-    .catch(err => {
-      error.handle(res, err);
-    });
+
 }
 
 /**
@@ -234,13 +204,7 @@ function deleteArticle(req: IUserSessionRequest, res: express.Response) {
  * @apiUse OtherErrors
  */
 function validateCheckout(req: IUserSessionRequest, res: express.Response) {
-  cart.validateCheckout(req.user.user.id, req.user.token)
-    .then(validation => {
-      res.json(validation);
-    })
-    .catch(err => {
-      error.handle(res, err);
-    });
+
 }
 
 
@@ -258,11 +222,5 @@ function validateCheckout(req: IUserSessionRequest, res: express.Response) {
  * @apiUse OtherErrors
  */
 function postOrder(req: IUserSessionRequest, res: express.Response) {
-  cart.placeOrder(req.user.user.id)
-    .then(_ => {
-      res.send();
-    })
-    .catch(err => {
-      error.handle(res, err);
-    });
+
 }

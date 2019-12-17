@@ -1,7 +1,7 @@
 {
     "name": "stats-service",
     "version": "0.1.0",
-    "description": "Server de Carrito",
+    "description": "Server de Estadisiticas",
     "repository": {
         "type": "git",
         "url": "https://github.com/nmarsollier/2018_microservicios.git"

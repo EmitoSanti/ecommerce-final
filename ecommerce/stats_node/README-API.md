@@ -1,7 +1,7 @@
 <a name="top"></a>
-# Cart Service v0.1.0
+# Stats Service v0.1.0
 
-Microservicio de Carrito
+Microservicio de Estadistica
 
 - [Carrito](#carrito)
 	- [Agregar Artículo](#agregar-artículo)
@@ -12,16 +12,9 @@ Microservicio de Carrito
 	- [Quitar Artículo](#quitar-artículo)
 	- [Validar Carrito](#validar-carrito)
 	
-- [RabbitMQ](#rabbitmq)
-	- [Orden Creada](#orden-creada)
-	
 - [RabbitMQ_GET](#rabbitmq_get)
-	- [Validación de Artículos](#validación-de-artículos)
+	- [Login de Usuarios](#login-de-usuarios)
 	- [Logout de Usuarios](#logout-de-usuarios)
-	
-- [RabbitMQ_POST](#rabbitmq_post)
-	- [Comprobar Articulo](#comprobar-articulo)
-	- [Crear Ordern](#crear-ordern)
 	
 
 
@@ -392,45 +385,14 @@ HTTP/1.1 500 Internal Server Error
    "error" : "Not Found"
 }
 ```
-# <a name='rabbitmq'></a> RabbitMQ
-
-## <a name='orden-creada'></a> Orden Creada
-[Back to top](#top)
-
-<p>Consume de mensajes order-placed desde Order con el topic &quot;order_placed&quot;.</p>
-
-	TOPIC order/order-placed
-
-
-
-
-### Success Response
-
-Mensaje
-
-```
-{
-"type": "order-placed",
-"message" : {
-    "cartId": "{cartId}",
-    "orderId": "{orderId}"
-    "articles": [{
-         "articleId": "{article id}"
-         "quantity" : {quantity}
-     }, ...]
-   }
-}
-```
-
-
 # <a name='rabbitmq_get'></a> RabbitMQ_GET
 
-## <a name='validación-de-artículos'></a> Validación de Artículos
+## <a name='login-de-usuarios'></a> Login de Usuarios
 [Back to top](#top)
 
-<p>Escucha de mensajes article-exist desde cart. Valida artículos</p>
+<p>Escucha de mensajes login desde auth.</p>
 
-	DIRECT cart/article-exist
+	FANOUT auth/login
 
 
 
@@ -441,12 +403,8 @@ Mensaje
 
 ```
 {
-   "type": "article-exist",
-   "message": {
-        "referenceId": "{cartId}",
-        "articleId": "{articleId}",
-        "valid": true|false
-   }
+   "type": "login",
+   "message": "{tokenId}"
 }
 ```
 
@@ -471,66 +429,5 @@ Mensaje
    "message": "{tokenId}"
 }
 ```
-
-
-# <a name='rabbitmq_post'></a> RabbitMQ_POST
-
-## <a name='comprobar-articulo'></a> Comprobar Articulo
-[Back to top](#top)
-
-<p>Cart enviá un mensaje a Catalog para comprobar la validez de un articulo.</p>
-
-	DIRECT catalog/article-exist
-
-
-
-### Examples
-
-Mensaje
-
-```
-{
-   "type": "article-exist",
-   "queue": "cart",
-   "exchange": "cart",
-    "message": {
-        "referenceId": "{cartId}",
-        "articleId": "{articleId}"
-   }
-}
-```
-
-
-
-## <a name='crear-ordern'></a> Crear Ordern
-[Back to top](#top)
-
-<p>Cart enviá un mensaje a Order para crear una nueva orden.</p>
-
-	DIRECT catalog/place-order
-
-
-
-### Examples
-
-Mensaje
-
-```
-{
-   "type": "place-order",
-   "queue": "order",
-   "exchange": "order",
-    "message": {
-        "cartId": "{cartId}",
-        "userId": "{userId}",
-        "articles": "{
-             "id": "{articleId}",
-             "quantity": {value}
-             }, ...
-        ]"
-   }
-}
-```
-
 
 

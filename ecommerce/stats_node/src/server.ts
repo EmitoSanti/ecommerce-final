@@ -2,8 +2,9 @@
 
 import { MongoError } from "mongodb";
 import * as mongoose from "mongoose";
-import * as rabbitStats from "./rabbit/statsService";
+// import * as rabbitStats from "./rabbit/statsService";
 import * as logoutObserver from "./rabbit/logoutService";
+import * as loginObserver from "./rabbit/loginService";
 import * as env from "./server/environment";
 import { Config } from "./server/environment";
 import * as express from "./server/express";
@@ -30,8 +31,9 @@ mongoose.connect(conf.mongoDb, {}, function (err: MongoError) {
 // Se configura e inicia express
 const app = express.init(conf);
 
-rabbitStats.init();
+// rabbitStats.init();
 logoutObserver.init();
+loginObserver.init();
 
 app.listen(conf.port, () => {
   console.log(`Stats Server escuchando en puerto ${conf.port}`);
