@@ -19,7 +19,7 @@ export interface IStatsCart extends Document {
   created: Date;
   enabled: Boolean;
   addDetail: Function;
-  incrementDetail: Function
+  incrementDetail: Function;
 }
 
 

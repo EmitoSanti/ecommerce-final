@@ -62,14 +62,14 @@ StatsArticleSchema.index({ articleId: 1, enabled: -1 });
 StatsArticleSchema.methods.addDetail = function (detail: IArticleDetail) {
   for (let _i = 0; _i < this.detail.length; _i++) {
     const element: IArticleDetail = this.articleDetail[_i];
-    if (element.date == detail.date) { //dia de hoy con dia de enviado
+    if (element.date == detail.date) { // dia de hoy con dia de enviado
       element.quantity = Number(element.quantity) + Number(detail.quantity);
       return;
     }
   }
 
   this.articleDetail.push(detail);
-  //sendArticleValidation(this._id, detail.date).then();
+  // sendArticleValidation(this._id, detail.date).then();
   return;
 };
 
