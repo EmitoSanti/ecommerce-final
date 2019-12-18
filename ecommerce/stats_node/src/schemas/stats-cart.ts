@@ -59,7 +59,7 @@ const StatsCartSchema = new Schema({
     type: Boolean,
     default: true
   }
-}, { collection: "cart" });
+}, { collection: "statscart" });
 
 StatsCartSchema.index({ userId: 1, enabled: -1 });
 StatsCartSchema.index({ userId: 1, orderId: 1 });
@@ -68,7 +68,7 @@ StatsCartSchema.index({ userId: 1, orderId: 1 });
  * Agrega un articulo al carrito
  */
 StatsCartSchema.methods.addArticle = function (article: ICartDetail) {
-  for (let _i = 0; _i < this.articles.length; _i++) {
+  for (let _i = 0; _i < this.cartDetail.length; _i++) {
     const element: ICartDetail = this.cartDetail[_i];
     if (element.articleId == article.articleId) {
       element.quantity = Number(element.quantity) + Number(article.quantity);
@@ -76,7 +76,7 @@ StatsCartSchema.methods.addArticle = function (article: ICartDetail) {
     }
   }
 
-  this.articles.push(article);
+  this.cartDetail.push(article);
   return;
 };
 
@@ -89,4 +89,4 @@ StatsCartSchema.pre("save", function (this: IStatsCart, next) {
   next();
 });
 
-export let Cart = model<IStatsCart>("StatsCart", StatsCartSchema);
+export let StatsCart = model<IStatsCart>("StatsCart", StatsCartSchema);
