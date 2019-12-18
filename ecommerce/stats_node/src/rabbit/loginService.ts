@@ -5,12 +5,14 @@
  */
 import * as env from "../server/environment";
 import { RabbitFanoutConsumer } from "./tools/fanoutConsumer";
+import * as stats from "../stats/stats";
 
 const conf = env.getConfig(process.env);
 
 interface IRabbitMessage {
     type: string;
     message: any;
+    time: Date;
 }
 
 export function init() {
@@ -31,6 +33,7 @@ export function init() {
  *        "message": "{tokenId}"
  *     }
  */
-function processLogin(rabbitMessage: IRabbitMessage) {
-    console.log("RabbitMQ Consume login " + rabbitMessage.message);
+export function processLogin(rabbitMessage: IRabbitMessage) {
+    stats.createUserStats(rabbitMessage.message, rabbitMessage.time);
+    console.log("RabbitMQ Consume login " + rabbitMessage.message + " " + rabbitMessage.time);
 }

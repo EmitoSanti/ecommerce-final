@@ -7,7 +7,10 @@ const conf = env.getConfig(process.env);
 interface IRabbitMessage {
     type: string;
     message: any;
+    time: Date;
 }
+
+
 
 let channel: amqp.Channel;
 
@@ -25,9 +28,11 @@ let channel: amqp.Channel;
  */
 export function sendLogin(id: string): Promise<IRabbitMessage> {
     console.log("sendLogin rabbit");
+    const hora = new Date(); 
     return sendMessage({
         type: "login",
-        message: id
+        message: id,
+        time: hora
     });
 }
 
@@ -46,7 +51,8 @@ export function sendLogin(id: string): Promise<IRabbitMessage> {
 export function sendLogout(token: string): Promise<IRabbitMessage> {
     return sendMessage({
         type: "logout",
-        message: token
+        message: token,
+        time: new Date()
     });
 }
 

@@ -84,4 +84,4 @@ StatsArticleSchema.pre("save", function (this: IStatsArticle, next) {
   next();
 });
 
-export let Articles = model<IStatsArticle>("StatsArticle", StatsArticleSchema);
+export let StatsArticle = model<IStatsArticle>("StatsArticle", StatsArticleSchema);

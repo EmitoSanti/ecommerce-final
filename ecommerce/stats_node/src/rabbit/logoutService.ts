@@ -32,7 +32,7 @@ export function init() {
  *        "message": "{tokenId}"
  *     }
  */
-function processLogout(rabbitMessage: IRabbitMessage) {
+export function processLogout(rabbitMessage: IRabbitMessage) {
     console.log("RabbitMQ Consume logout " + rabbitMessage.message);
     token.invalidate(rabbitMessage.message);
 }
