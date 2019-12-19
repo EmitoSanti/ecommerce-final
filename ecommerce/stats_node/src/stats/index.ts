@@ -1,7 +1,7 @@
 "use strict";
 
 export {
-    createUserStats/*,
+    addUserStats/*,
     addStat,
     incrementDetail,
     deleteStat*/

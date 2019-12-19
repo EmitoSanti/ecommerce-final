@@ -403,8 +403,9 @@ Mensaje
 
 ```
 {
-   "type": "login",
-   "message": "{tokenId}"
+   "type": "logout",
+   "message": "NaN",
+   "time": "Date"
 }
 ```
 
@@ -426,7 +427,8 @@ Mensaje
 ```
 {
    "type": "logout",
-   "message": "{tokenId}"
+   "message": "NaN",
+   "time": "Date"
 }
 ```
 

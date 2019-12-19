@@ -5,53 +5,40 @@ import * as env from "../server/environment";
 
 const conf = env.getConfig(process.env);
 
-export interface IUserDetail {
-    action: string;
-    time: Date;
-}
-
-export interface IStatsUser extends Document {
-    userId: string;
-    name: string;
-    userDetail: IUserDetail[];
+export interface IStatsUsers extends Document {
+    typeTime: string;
+    accionUser: string;
+    countUser: number;
+    created: string;
     updated: Date;
-    created: Date;
     enabled: Boolean;
-    addDetail: Function;
+    addQuantity: Function;
 }
 
 /**
- * Esquema del user stat
+ * Esquema Stats User
  */
 const StatsUserSchema = new Schema({
-  userId: {
+  typeTime: {
     type: String,
     trim: true,
     default: "",
-    required: "El userId debe existir en auth"
+    required: "El tipo de tiempo debe existir"
   },
-  name: {
+  accionUser: {
     type: String,
     trim: true,
     default: "",
-    required: "El nombre de usuario es requerido"
+    required: "El tipo de accion debe existir"
   },
-  userDetail: [{
-    action: {
-      type: String,
-      required: "Accion ejecutada relacionado al usuario",
-      trim: true
-    },
-    time: {
-        type: Date,
-        default: Date.now()
-    }
-  }],
-  updated: {
-    type: Date,
-    default: Date.now()
+  countUser: {
+    type: Number,
+    default: 1
   },
   created: {
+    type: String
+  },
+  updated: {
     type: Date,
     default: Date.now()
   },
@@ -65,19 +52,20 @@ StatsUserSchema.index({ userId: 1, enabled: -1 });
 
 
 /**
- * Agrega un articulo al carrito
+ * Contador de usuario para el registro correspondiente suma en 1
  */
-StatsUserSchema.methods.addDetail = function (detail: IUserDetail) {
-  this.userDetail.push(detail);
-  return;
+StatsUserSchema.methods.addQuantity = function () {
+  console.log("viejo countUser: " + this.countUser);
+  this.countUser++;
+  console.log("nuevo countUser: " + this.countUser);
 };
 
 /**
  * Trigger antes de guardar
  */
-StatsUserSchema.pre("save", function (this: IStatsUser, next) {
+StatsUserSchema.pre("save", function (this: IStatsUsers, next) {
   this.updated = new Date();
   next();
 });
 
-export let StatsUser = model<IStatsUser>("StatsUser", StatsUserSchema);
+export let StatsUser = model<IStatsUsers>("StatsUser", StatsUserSchema);

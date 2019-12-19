@@ -5,26 +5,21 @@ import * as env from "../server/environment";
 
 const conf = env.getConfig(process.env);
 
-export interface ICartDetail {
-  articleId: string;
-  quantity: number;
-}
-
-export interface IStatsCart extends Document {
+export interface IStatsCarts extends Document {
   userId: string;
   cartId: string;
   orderId: string;
-  cartDetail: ICartDetail[];
+  countArticles: number;
+  created: string;
   updated: Date;
-  created: Date;
   enabled: Boolean;
-  addDetail: Function;
-  incrementDetail: Function;
+  addQuantity: Function;
+  decrementQuantity: Function;
+  deprecateCart: Function;
 }
 
-
 /**
- * Esquema del cart
+ * Esquema Stats Cart
  */
 const StatsCartSchema = new Schema({
   userId: {
@@ -37,21 +32,13 @@ const StatsCartSchema = new Schema({
     type: String,
     trim: true
   },
-  cartDetail: [{
-    articleId: {
-      type: String,
-      required: "El articlelId agregado al cart",
-      trim: true
-    },
-    quantity: {
-      type: Number
-    }
-  }],
-  updated: {
-    type: Date,
-    default: Date.now()
+  countArticles: {
+    type: Number
   },
   created: {
+    type: String
+  },
+  updated: {
     type: Date,
     default: Date.now()
   },
@@ -65,28 +52,40 @@ StatsCartSchema.index({ userId: 1, enabled: -1 });
 StatsCartSchema.index({ userId: 1, orderId: 1 });
 
 /**
- * Agrega un articulo al carrito
+ * Incrementa el campo countArticles del carrito
  */
-StatsCartSchema.methods.addArticle = function (article: ICartDetail) {
-  for (let _i = 0; _i < this.cartDetail.length; _i++) {
-    const element: ICartDetail = this.cartDetail[_i];
-    if (element.articleId == article.articleId) {
-      element.quantity = Number(element.quantity) + Number(article.quantity);
-      return;
-    }
-  }
+StatsCartSchema.methods.addArticle = function () {
+  console.log("viejo countUser: " + this.countUser);
+  this.countUser++;
+  console.log("nuevo countUser: " + this.countUser);
+};
 
-  this.cartDetail.push(article);
-  return;
+/**
+ * Decrementa el campo countArticles del carrito
+ */
+StatsCartSchema.methods.decrementQuantity = function () {
+  console.log("viejo countUser: " + this.countUser);
+  if (this.countUser > 0) {
+    this.countUser--;
+  }
+  console.log("nuevo countUser: " + this.countUser);
+};
+
+/**
+ * Depreca el carrito
+ */
+StatsCartSchema.methods.deprecateCart = function () {
+  console.log("viejo enabled: " + this.enabled);
+  this.enabled = false;
+  console.log("nuevo enabled: " + this.enabled);
 };
 
 /**
  * Trigger antes de guardar
  */
-StatsCartSchema.pre("save", function (this: IStatsCart, next) {
+StatsCartSchema.pre("save", function (this: IStatsCarts, next) {
   this.updated = new Date();
-
   next();
 });
 
-export let StatsCart = model<IStatsCart>("StatsCart", StatsCartSchema);
+export let StatsCart = model<IStatsCarts>("StatsCart", StatsCartSchema);

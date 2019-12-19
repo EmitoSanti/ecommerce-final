@@ -10,8 +10,6 @@ interface IRabbitMessage {
     time: Date;
 }
 
-
-
 let channel: amqp.Channel;
 
 /**
@@ -24,15 +22,16 @@ let channel: amqp.Channel;
  *     {
  *        "type": "login",
  *        "message": "{id logueado}"
+ *        "time": "{time}"
  *     }
  */
 export function sendLogin(id: string): Promise<IRabbitMessage> {
     console.log("sendLogin rabbit");
-    const hora = new Date(); 
+    const time = new Date();
     return sendMessage({
         type: "login",
         message: id,
-        time: hora
+        time: time
     });
 }
 
@@ -46,13 +45,16 @@ export function sendLogin(id: string): Promise<IRabbitMessage> {
  *     {
  *        "type": "logout",
  *        "message": "{Token revocado}"
+ *        "time": "{time}"
  *     }
  */
 export function sendLogout(token: string): Promise<IRabbitMessage> {
+    console.log("sendLogout rabbit");
+    const time = new Date();
     return sendMessage({
         type: "logout",
         message: token,
-        time: new Date()
+        time: time
     });
 }
 

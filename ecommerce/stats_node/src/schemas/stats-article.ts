@@ -5,46 +5,40 @@ import * as env from "../server/environment";
 
 const conf = env.getConfig(process.env);
 
-export interface IArticleDetail {
-  date: Date;
-  quantity: number;
- // hacer aumento de articulo incrementArticle: Function;
-}
-
-export interface IStatsArticle extends Document {
+export interface IStatsArticles extends Document {
   articleId: string;
-  articleDetail: IArticleDetail[];
+  typeTime: string;
+  countArticle: number;
+  created: string;
   updated: Date;
-  created: Date;
   enabled: Boolean;
-  addDetail: Function;
+  addQuantity: Function;
 }
 
 /**
- * Esquema del cart
+ * Esquema Stats Article
  */
 const StatsArticleSchema = new Schema({
-    articleId: {
+  articleId: {
     type: String,
     trim: true,
     default: "",
-    required: "El userId asociado al cart"
+    required: "El id del algun articulo debe existir"
   },
-  articleDetail: [{
-    date: {
-      type: Date,
-      required: "Fecha de articulo agregado a algun cart",
-      trim: true
-    },
-    quantity: {
-      type: Number
-    }
-  }],
-  updated: {
-    type: Date,
-    default: Date.now()
+  typeTime: {
+    type: String,
+    trim: true,
+    default: "",
+    required: "El tipo de tiempo debe existir"
+  },
+  countArticle: {
+    type: Number,
+    default: 1
   },
   created: {
+    type: String
+  },
+  updated: {
     type: Date,
     default: Date.now()
   },
@@ -57,31 +51,20 @@ const StatsArticleSchema = new Schema({
 StatsArticleSchema.index({ articleId: 1, enabled: -1 });
 
 /**
- * Agrega el detalle, fecha y cantidad a la estadistica por articulo
+ * Contador de articulo para el registro correspondiente suma en 1
  */
-StatsArticleSchema.methods.addDetail = function (detail: IArticleDetail) {
-  for (let _i = 0; _i < this.detail.length; _i++) {
-    const element: IArticleDetail = this.articleDetail[_i];
-    if (element.date == detail.date) { // dia de hoy con dia de enviado
-      element.quantity = Number(element.quantity) + Number(detail.quantity);
-      return;
-    }
-  }
-
-  this.articleDetail.push(detail);
-  // sendArticleValidation(this._id, detail.date).then();
-  return;
+StatsArticleSchema.methods.addQuantity = function () {
+  console.log("viejo countUser: " + this.countArticle);
+  this.countArticle++;
+  console.log("nuevo countUser: " + this.countArticle);
 };
-
-
 
 /**
  * Trigger antes de guardar
  */
-StatsArticleSchema.pre("save", function (this: IStatsArticle, next) {
+StatsArticleSchema.pre("save", function (this: IStatsArticles, next) {
   this.updated = new Date();
-
   next();
 });
 
-export let StatsArticle = model<IStatsArticle>("StatsArticle", StatsArticleSchema);
+export let StatsArticle = model<IStatsArticles>("StatsArticle", StatsArticleSchema);
