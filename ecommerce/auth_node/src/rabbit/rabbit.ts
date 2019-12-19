@@ -28,7 +28,7 @@ let channel: amqp.Channel;
  */
 export function sendLogin(id: string): Promise<IRabbitMessage> {
     console.log("sendLogin rabbit");
-    const hora = new Date(); 
+    const hora = new Date();
     return sendMessage({
         type: "login",
         message: id,

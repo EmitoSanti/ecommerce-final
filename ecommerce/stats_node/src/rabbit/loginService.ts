@@ -29,11 +29,13 @@ export function init() {
  *
  * @apiSuccessExample {json} Mensaje
  *     {
- *        "type": "login",
- *        "message": "{tokenId}"
+ *        "type": "logout",
+ *        "message": "NaN",
+ *        "time": "Date"
  *     }
  */
 export function processLogin(rabbitMessage: IRabbitMessage) {
-    stats.createUserStats(rabbitMessage.message, rabbitMessage.time);
+    // stats.createUserStats(rabbitMessage.message, rabbitMessage.time);
+    stats.addUserStats("login", rabbitMessage.time);
     console.log("RabbitMQ Consume login " + rabbitMessage.message + " " + rabbitMessage.time);
 }

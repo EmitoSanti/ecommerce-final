@@ -4,14 +4,15 @@
  *  Servicios de escucha de eventos rabbit
  */
 import * as env from "../server/environment";
-import * as token from "../token";
 import { RabbitFanoutConsumer } from "./tools/fanoutConsumer";
+import * as stats from "../stats/stats";
 
 const conf = env.getConfig(process.env);
 
 interface IRabbitMessage {
     type: string;
     message: any;
+    time: Date;
 }
 
 export function init() {
@@ -29,10 +30,11 @@ export function init() {
  * @apiSuccessExample {json} Mensaje
  *     {
  *        "type": "logout",
- *        "message": "{tokenId}"
+ *        "message": "NaN",
+ *        "time": "Date"
  *     }
  */
 export function processLogout(rabbitMessage: IRabbitMessage) {
     console.log("RabbitMQ Consume logout " + rabbitMessage.message);
-    token.invalidate(rabbitMessage.message);
+    stats.addUserStats("logout", rabbitMessage.time);
 }
