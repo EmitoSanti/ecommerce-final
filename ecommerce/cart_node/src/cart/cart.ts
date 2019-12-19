@@ -6,6 +6,7 @@ import * as env from "../server/environment";
 import * as error from "../server/error";
 import { Cart, ICart, ICartArticle } from "./schema";
 import { sendArticleValidation, sendPlaceOrder } from "../rabbit/cartService";
+import { sendStatArticle } from "../rabbit/statService";
 
 const conf = env.getConfig(process.env);
 
@@ -61,7 +62,9 @@ export async function addArticle(userId: string, body: AddArticleRequest): Promi
         };
 
         cart.addArticle(article);
-
+        console.log("sendStatArticle");
+        console.log("cart: " + JSON.stringify(cart));
+        sendStatArticle(cart._id, cart.orderId, body.articleId, body.quantity);
         // Save the Cart
         return new Promise<ICart>((resolve, reject) => {
             cart.save(function (err: any) {

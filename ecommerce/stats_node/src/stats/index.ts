@@ -1,8 +1,6 @@
 "use strict";
 
 export {
-    addUserStats/*,
-    addStat,
-    incrementDetail,
-    deleteStat*/
+    addUserStats,
+    addCartStats
 } from "./stats";

@@ -13,6 +13,7 @@ Microservicio de Estadistica
 	- [Validar Carrito](#validar-carrito)
 	
 - [RabbitMQ_GET](#rabbitmq_get)
+	- [Para Estadisitica de Articulos y Carritos](#para-estadisitica-de-articulos-y-carritos)
 	- [Login de Usuarios](#login-de-usuarios)
 	- [Logout de Usuarios](#logout-de-usuarios)
 	
@@ -386,6 +387,34 @@ HTTP/1.1 500 Internal Server Error
 }
 ```
 # <a name='rabbitmq_get'></a> RabbitMQ_GET
+
+## <a name='para-estadisitica-de-articulos-y-carritos'></a> Para Estadisitica de Articulos y Carritos
+[Back to top](#top)
+
+<p>Escucha de mensajes stat-article desde cart. Para Estadisitica de Articulos y Carritos</p>
+
+	DIRECT cart/stat-article
+
+
+
+
+### Success Response
+
+Mensaje
+
+```
+{
+   "type": "stat-article",
+   "message": {
+        "cartId": "{cartId}",
+        "orderId": "{orderId}",
+        "articleId": "{articleId}",
+        "quantity": {quantity},
+        "time": "{time}""
+   }
+}
+```
+
 
 ## <a name='login-de-usuarios'></a> Login de Usuarios
 [Back to top](#top)

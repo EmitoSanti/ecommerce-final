@@ -34,7 +34,7 @@ export class RabbitDirectConsumer {
                 setTimeout(() => this.init(), 10000);
             });
 
-            console.log("RabbitMQ " + this.exchange + " conectado");
+            console.log("RabbitMQ direct consumer: " + this.exchange + " conectado");
 
             const exchange = await channel.assertExchange(this.exchange, "direct", { durable: false });
 

@@ -50,7 +50,7 @@ export class RabbitDirectEmitter {
             try {
                 const conn = await amqp.connect(this.conf.rabbitUrl);
                 this.channel = await conn.createChannel();
-                console.log("RabbitMQ " + this.exchange + " conectado");
+                console.log("RabbitMQ direct emitter: " + this.exchange + " conectado");
                 this.channel.on("close", function () {
                     console.error("RabbitMQ " + this.exchange + " Conexión cerrada");
                     this.channel = undefined;

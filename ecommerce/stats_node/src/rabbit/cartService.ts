@@ -3,18 +3,10 @@
 /**
  *  Servicios de escucha de eventos rabbit
  */
-import * as env from "../server/environment";
-import { RabbitFanoutConsumer } from "./tools/fanoutConsumer";
-import * as stats from "../stats/stats";
+
 import { RabbitDirectConsumer } from "./tools/directConsumer";
-
-const conf = env.getConfig(process.env);
-
-interface IRabbitMessage {
-    type: string;
-    message: any;
-    time: Date;
-}
+import { IRabbitMessage } from "./tools/common";
+import * as stats from "../stats/stats";
 
 interface ICartMessage {
     cartId: string;
@@ -25,33 +17,10 @@ interface ICartMessage {
 }
 
 export function init() {
-    const fanout = new RabbitFanoutConsumer("auth");
-    fanout.addProcessor("login", processLogin);
-    fanout.init();
-
     console.log("addProcessor");
     const cart = new RabbitDirectConsumer("cartstat", "cartstat");
     cart.addProcessor("stat-article", processStatCart);
     cart.init();
-}
-
-/**
- * @api {fanout} auth/login Login de Usuarios
- * @apiGroup RabbitMQ GET
- *
- * @apiDescription Escucha de mensajes login desde auth.
- *
- * @apiSuccessExample {json} Mensaje
- *     {
- *        "type": "logout",
- *        "message": "NaN",
- *        "time": "Date"
- *     }
- */
-export function processLogin(rabbitMessage: IRabbitMessage) {
-    // stats.createUserStats(rabbitMessage.message, rabbitMessage.time);
-    stats.addUserStats("login", rabbitMessage.time);
-    console.log("RabbitMQ Consume login " + rabbitMessage.message + " " + rabbitMessage.time);
 }
 
 /**
@@ -64,7 +33,7 @@ export function processLogin(rabbitMessage: IRabbitMessage) {
  *     {
  *        "type": "stat-article",
  *        "message": {
- *             "referenceId": "{cartId}",
+ *             "cartId": "{cartId}",
  *             "orderId": "{orderId}",
  *             "articleId": "{articleId}",
  *             "quantity": {quantity},

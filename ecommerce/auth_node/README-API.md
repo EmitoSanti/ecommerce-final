@@ -40,6 +40,7 @@ Mensaje
 {
    "type": "login",
    "message": "{id logueado}"
+   "time": "{time}"
 }
 ```
 

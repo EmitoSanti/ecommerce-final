@@ -55,7 +55,7 @@ StatsArticleSchema.index({ articleId: 1, enabled: -1 });
  */
 StatsArticleSchema.methods.addQuantity = function () {
   console.log("viejo countUser: " + this.countArticle);
-  this.countArticle++;
+    this.countArticle++;
   console.log("nuevo countUser: " + this.countArticle);
 };
 

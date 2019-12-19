@@ -35,9 +35,9 @@ export function init() {
     cart2.addProcessor("order-placed", processOrderPlaced);
     cart2.init();
 
-    const cart3 = new RabbitTopicConsumer("topic_cart", "sell_flow", "cart_stats");
+    /*const cart3 = new RabbitTopicConsumer("topic_cart", "sell_flow", "cart_stats");
     cart3.addProcessor("cart-stats", processToStats);
-    cart3.init();
+    cart3.init();*/
 }
 
 /**

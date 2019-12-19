@@ -163,19 +163,28 @@ export async function addArticleStats(id: string, time: Date): Promise<void> {
     }
 }
 
+interface Cart {
+    cartId: string;
+    orderId: string;
+    articleId: string;
+    quantity: number;
+    time: Date;
+}
 /**
  * Creacion de un nuevo registro para la estadistica de carritos
  */
-export function createCartStats(user: string, order: string, time: Date): Promise<IStatsCarts> {
+export function createCartStats(cart: Cart): Promise<IStatsCarts> {
     console.log("createArticleStats");
 
     return new Promise<IStatsCarts>((resolve, reject) => {
         const stats = new StatsCart();
-        stats.userId = user;
-        stats.orderId = order;
-        stats.created = time.toString().slice(0, 13);
+        stats.cartId = cart.cartId;
+        stats.orderId = cart.orderId;
+        stats.countArticles = cart.quantity;
+        stats.created = cart.time.toString().slice(0, 13);
+        addArticleStats(cart.articleId, cart.time);
 
-        // Then save the user
+        // Then save the Stat Cart
         console.log("stats.save");
         stats.save(function (err: any) {
             if (err) reject(err);
@@ -185,25 +194,27 @@ export function createCartStats(user: string, order: string, time: Date): Promis
     });
 }
 
+
 /**
  * Incrementa un campo del registro para la estadistica de carritos
  */
-export async function addCartStats(user: string, order: string, article: boolean, time: Date): Promise<void> {
-    console.log("addArticleStats");
-    console.log("user: " + user + " order: " + order + " article: " + article);
+export async function addCartStats(cart: Cart): Promise<void> {
+    console.log("addCartStats");
+    console.log("cart: " + JSON.stringify(cart));
 
     try {
-        const hours = time.toString().slice(0, 13);
+        const hours = cart.time.toString().slice(0, 13);
         console.log("minutes: " + hours);
-        const statsHour = await StatsCart.findOne({ user: user, order: order, created: hours}).exec();
+        const statsHour = await StatsCart.findOne({ cartId: cart.cartId, orderId: cart.orderId }).exec();
 
         console.log("lodash statsHour: " + _.isNull(statsHour) + " " + statsHour);
         if (!_.isNull(statsHour)) {
             console.log("save statsHour : " + statsHour);
-            if (article) {
-                statsHour.addQuantity();
+            if (cart.articleId) {
+                statsHour.addQuantity(cart.quantity);
+                addArticleStats(cart.articleId, cart.time);
             } else {
-                statsHour.decrementQuantity();
+                // statsHour.decrementQuantity();
             }
 
             // Save the Stat Cart
@@ -211,7 +222,7 @@ export async function addCartStats(user: string, order: string, article: boolean
             console.log("Save statsHour: " + JSON.stringify(statsHour));
         } else {
             console.log("Not save statsHour: " + statsHour);
-            createCartStats(user, order, time);
+            createCartStats(cart);
         }
 
         return Promise.resolve();
