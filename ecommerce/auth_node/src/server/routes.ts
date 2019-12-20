@@ -72,7 +72,7 @@ function changePassword(req: ISessionRequest, res: express.Response) {
  *
  * @apiDescription Registra un nuevo usuario en el sistema.
  *
- * @apiExample {json} Body
+ * @HTTP/1.1 200 OK {json} Body
  *    {
  *      "name": "{Nombre de Usuario}",
  *      "login": "{Login de usuario}",

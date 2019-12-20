@@ -1,0 +1,90 @@
+<h2>Estadistica</h2>
+
+<div layout=”column”>
+    <div layout=”row”>
+        <label>Estadistica de </label>
+        <mat-form-field>
+            <mat-select placeholder="Seleccionar" [(ngModel)]="collectionValue">
+            <mat-option *ngFor="let collectionSelect of collections" [value]="collectionSelect">
+                {{collectionSelect}}
+            </mat-option>
+            </mat-select>
+        </mat-form-field>
+        {{collectionValue}}
+    </div>
+
+    <div layout=”row”>
+        <section class="example-section" *ngIf="collectionValue !== 'usuarios'"> 
+            <mat-checkbox class="example-margin" [(ngModel)]="porID">Por ID?</mat-checkbox>
+        </section>
+    </div>
+
+    <div *ngIf="collectionValue !== 'carritos'">
+    <label>Intervalos por </label>
+        <mat-form-field>
+            <mat-select placeholder="Seleccionar" [(ngModel)]="typeTimeValue">
+                <mat-option *ngFor="let typeTimeSelect of typeTimes" [value]="typeTimeSelect">
+                    {{typeTimeSelect}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+        {{typeTimeValue}}
+    </div>
+
+    <div layout=”row” *ngIf="collectionValue === 'usuarios'">
+        <label>Accion de </label>
+        <mat-form-field  [(ngModel)]="accionValue">
+            <mat-select placeholder="Seleccionar">
+                <mat-option *ngFor="let accionSelect of accions" [value]="accionSelect">
+                    {{accionSelect}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+        {{accionValue}}
+    </div>
+
+    <div layout=”row”>
+        <label>Contador por registro mayor a </label>
+        <mat-form-field>
+            <mat-select placeholder="Seleccionar" [(ngModel)]="countObjValue">
+                <mat-option *ngFor="let countObjSelect of countObjs" [value]="countObjSelect">
+                    {{countObjSelect}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+        Ingrese otro maximo: <input matInput type="text" placeholder="Numero input" [(ngModel)]="countObjValue">
+    </div>
+</div>
+
+<div *ngIf="collectionValue">
+    <label>
+        Date Time Range From:
+        <input [owlDateTimeTrigger]="dt12" [owlDateTime]="dt12"
+               [(ngModel)]="selectedMoments"
+               [selectMode]="'rangeFrom'">
+        <owl-date-time #dt12></owl-date-time>
+    </label>
+
+    <label>
+        Date Time Range To:
+        <input [owlDateTimeTrigger]="dt13" [owlDateTime]="dt13"
+               [(ngModel)]="selectedMoments"
+               [selectMode]="'rangeTo'">
+        <owl-date-time #dt13></owl-date-time>
+    </label>
+   
+</div>
+<div>
+    Rango de fecha y hora: {{selectedMoments | json}}
+</div>
+<div>
+    <button class="btn btn-primary " (click)="runGraf()" [disabled]="selectedMoments.length === 0">Graficar</button>
+</div>
+<div>
+    <button class="btn btn-primary " (click)="saveStat()" [disabled]="isSave">Guardar Estadistica</button>
+</div>
+<div *ngIf="chart">
+    <canvas id="canvas">{{ chart }}</canvas>
+</div>
+
+<div *ngIf="errorMessage">{{errorMessage}}</div>

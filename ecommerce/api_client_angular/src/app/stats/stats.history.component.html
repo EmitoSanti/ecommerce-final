@@ -1,0 +1,41 @@
+<h2>Historial de Estadisticas</h2>
+{{statsHistory}}
+<div layout=”column”>
+    <div layout=”row”>
+        <div *ngIf="statsHistory.length === 0">
+            <label>No hay historial</label>
+        </div>
+        <mat-nav-list>
+            <mat-list-item *ngFor="let stat of statsHistory">
+            <label>{{stat.title}}</label>
+               
+            </mat-list-item>
+          </mat-nav-list>
+          <table class="table">
+            <thead>
+        
+                <tr>
+                    <th> Estadisiticas </th>
+                    <th> Graficar </th>
+                </tr>
+            </thead>
+        
+            <tbody>
+                <tr *ngFor="let element of statsHistory">
+                    <td> {{element | json}} </td>
+                    <td>
+                        <button mat-icon-button (click)="renderGraf(element)">
+                            Mostrar Grafico
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div *ngIf="chart">
+    <canvas id="canvas">{{ chart }}</canvas>
+</div>
+
+<div *ngIf="errorMessage">{{errorMessage}}</div>

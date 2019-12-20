@@ -2,7 +2,7 @@
 
 import { Express } from "express";
 import * as token from "../token";
-
+import * as stat from "../stats";
 import * as error from "./error";
 import * as express from "express";
 import { NextFunction } from "connect";
@@ -11,13 +11,9 @@ import { NextFunction } from "connect";
  * Modulo de seguridad, login/logout, cambio de contraseñas, etc
  */
 export function init(app: Express) {
-  app.route("/v1/cart/article").post(validateToken, addArticle);
-  app.route("/v1/cart").get(validateToken, getCart);
-  app.route("/v1/cart/article/:articleId").delete(validateToken, deleteArticle);
-  app.route("/v1/cart/article/:articleId/increment").post(validateToken, incrementArticle);
-  app.route("/v1/cart/article/:articleId/decrement").post(validateToken, decrementArticle);
-  app.route("/v1/cart/validate").get(validateToken, validateCheckout);
-  app.route("/v1/cart/checkout").post(validateToken, postOrder);
+  app.route("/v1/stats").get(validateToken, getStatS);
+  app.route("/v1/stats/createhistory").post(createHistory, createHistory);
+  app.route("/v1/stats/history").get(validateToken, getHistory);
 }
 
 interface IUserSessionRequest extends express.Request {
@@ -48,24 +44,94 @@ function validateToken(req: IUserSessionRequest, res: express.Response, next: Ne
 }
 
 /**
- * @api {post} /v1/cart/article Agregar Artículo
- * @apiName Agregar Artículo
- * @apiGroup Carrito
+ * @api {get} /v1/stats Obtener Estadisticas Nuevas
+ * @apiName Obtener Estadisticas Nuevas
+ * @apiGroup Obtener Estadisticas Nuevas
  *
- * @apiDescription Agregar artículos al carrito.
+ * @apiDescription Devuelve las estadisticas requeridas
+ *
+ * @apiSuccessExample {json} Body
+ *    HTTP/1.1 200 OK
+ *    {
+ *      "objId": "true|false",
+ *      "collection": "{collection de la BD}",
+ *      "typeTime": "{Filtro de por tiempo}",
+ *      "accion": "{accion de auth}",
+ *      "countObj": {Filtro por cantidad minima por articulo},
+ *      "created": "{Fecha de Inicio}",
+ *      "timeEnd": "{Fecha de finalizacion}",
+ *      "enabled": true|false,
+ *    }
+ *
+ * @apiUse ParamValidationErrors
+ * @apiUse OtherErrors
+ */
+function getStatS(req: IUserSessionRequest, res: express.Response) {
+  console.log("Routes getStats");
+  console.log("parametros " + JSON.stringify(req.query));
+  stat.getStats(req.query)
+  .then(stat => {
+    res.json(stat);
+  })
+  .catch(err => {
+    error.handle(res, err);
+  });
+}
+
+/**
+ * @api {post} /v1/stats/history/ Guardar estadistica
+ * @apiName Guardar estadistica
+ * @apiGroup Estadistica
+ *
+ * @apiDescription Guardar estadistica nueva.
  *
  * @apiExample {json} Body
  *    {
- *      "articleId": "{Article Id}",
- *      "quantity": {Quantity to add}
+ *      "stat": "{string}"
+ *      "labels": "{string}",
+ *      "datasets": [{label: {string}, [data: {number}]}],
+ *      "updated": "{Fecha ultima actualización}",
+ *      "created": "{Fecha creado}"
+ *    }
+ *
+ * @apiSuccessExample {json} Respuesta
+ *     HTTP/1.1 200 OK
+ *     {
+ *       "menssage": "{string}"
+ *     }
+ *
+ * @apiUse ParamValidationErrors
+ * @apiUse OtherErrors
+ */
+async function createHistory(req: IUserSessionRequest, res: express.Response) {
+  console.log("Routes createHistory");
+  try {
+    const saveStat = await stat.createHistory(req.body);
+    res.json({ menssage: saveStat });
+    res.send();
+  } catch (err) {
+    error.handle(res, err);
+  }
+}
+
+/**
+ * @api {get} /v1/stat/history/ Obtener Estadistica antigua
+ * @apiName Obtener Estadistica antigua
+ * @apiGroup Estadistica
+ *
+ * @apiDescription Obtener estadistica antigua del la base de datos
+ *
+ * @apiExample {json} Body
+ *    {
+ *      "label": "{string}",
+ *      "data": [number]
  *    }
  *
  * @apiSuccessExample {json} Body
  *    {
- *      "userId": "{User Id}",
- *      "enabled": true|false,
- *      "_id": "{Id de carrito}",
- *      "articles": [{Artículos}],
+ *      "stat": "{string}"
+ *      "labels": "{string}",
+ *      "datasets": [{data}],
  *      "updated": "{Fecha ultima actualización}",
  *      "created": "{Fecha creado}"
  *    }
@@ -73,154 +139,13 @@ function validateToken(req: IUserSessionRequest, res: express.Response, next: Ne
  * @apiUse ParamValidationErrors
  * @apiUse OtherErrors
  */
-function addArticle(req: IUserSessionRequest, res: express.Response) {
-
-}
-
-/**
- * @api {post} /v1/cart/article/:articleId/decrement Decrementar
- * @apiName Decrementar Cart
- * @apiGroup Carrito
- *
- * @apiDescription Decrementa la cantidad de artículos en el cart.
- *
- * @apiSuccessExample {json} Body
- *    {
- *      "articleId": "{Article Id}",
- *      "quantity": {articles to decrement}
- *    }
- *
- * @apiSuccessExample {json} Body
- *    {
- *      "userId": "{User Id}",
- *      "enabled": true|false,
- *      "_id": "{Id de carrito}",
- *      "articles": [{Artículos}],
- *      "updated": "{Fecha ultima actualización}",
- *      "created": "{Fecha creado}"
- *    }
- *
- * @apiUse ParamValidationErrors
- * @apiUse OtherErrors
- */
-function decrementArticle(req: IUserSessionRequest, res: express.Response) {
-
-}
-
-/**
- * @api {post} /v1/cart/article/:articleId/increment Incrementar
- * @apiName Incrementar Cart
- * @apiGroup Carrito
- *
- * @apiDescription Incrementa la cantidad de artículos en el cart.
- *
- * @apiSuccessExample {json} Body
- *    {
- *      "articleId": "{Article Id}",
- *      "quantity": {articles to increment},
- *      "validated": True|False Determina si el articulo se valido en catalog
- *    }
- *
- * @apiSuccessExample {json} Body
- *    {
- *      "userId": "{User Id}",
- *      "enabled": true|false,
- *      "_id": "{Id de carrito}",
- *      "articles": [{Artículos}],
- *      "updated": "{Fecha ultima actualización}",
- *      "created": "{Fecha creado}"
- *    }
- *
- * @apiUse ParamValidationErrors
- * @apiUse OtherErrors
- */
-function incrementArticle(req: IUserSessionRequest, res: express.Response) {
-
-}
-
-/**
- * @api {get} /v1/cart Obtener Carrito
- * @apiName Obtener Carrito
- * @apiGroup Carrito
- *
- * @apiDescription Devuelve el carrito activo.
- *
- * @apiSuccessExample {json} Body
- *    {
- *      "userId": "{User Id}",
- *      "enabled": true|false,
- *      "_id": "{Id de carrito}",
- *      "articles": [{Artículos}],
- *      "updated": "{Fecha ultima actualización}",
- *      "created": "{Fecha creado}"
- *    }
- *
- * @apiUse ParamValidationErrors
- * @apiUse OtherErrors
- */
-function getCart(req: IUserSessionRequest, res: express.Response) {
-
-}
-
-/**
- * @api {delete} /cart/article/:articleId Quitar Artículo
- * @apiName Quitar Artículo
- * @apiGroup Carrito
- *
- * @apiDescription Eliminar un articulo del carrito.
- *
- * @apiSuccessExample {string} Body
- *    HTTP/1.1 200 Ok
- *
- * @apiUse ParamValidationErrors
- * @apiUse OtherErrors
- */
-function deleteArticle(req: IUserSessionRequest, res: express.Response) {
-  const articleId = escape(req.params.articleId);
-
-
-}
-
-/**
- * @api {post} /v1/cart/validate Validar Carrito
- * @apiName Validar Carrito
- * @apiGroup Carrito
- *
- * @apiDescription Realiza una validación completa del cart, para realizar el checkout.
- *
- * @apiSuccessExample {json} Body
- *   {
- *      "errors": [
- *          {  "articleId": "{Article}",
- *             "message" : "{Error message}"
- *          }, ...],
- *      "warnings": [
- *          {  "articleId": "{Article}",
- *             "message" : "{Error message}"
- *          }, ...]
- *    }
- *
- * @apiUse ParamValidationErrors
- * @apiUse OtherErrors
- */
-function validateCheckout(req: IUserSessionRequest, res: express.Response) {
-
-}
-
-
-/**
- * @api {post} /v1/cart/checkout Checkout
- * @apiName Checkout
- * @apiGroup Carrito
- *
- * @apiDescription Realiza el checkout del carrito.
- *
- * @apiSuccessExample {string} Body
- *    HTTP/1.1 200 Ok
- *
- * @apiUse ParamValidationErrors
- * @apiUse OtherErrors
- */
-function postOrder(req: IUserSessionRequest, res: express.Response) {
-
+function getHistory(req: IUserSessionRequest, res: express.Response) {
+  console.log("Routes getHistory");
+  stat.getHistory()
+  .then(stat => {
+    res.json(stat);
+  })
+  .catch(err => {
+    error.handle(res, err);
+  });
 }

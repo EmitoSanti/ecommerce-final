@@ -23,6 +23,7 @@ Microservicio de Carrito
 - [RabbitMQ_POST](#rabbitmq_post)
 	- [Comprobar Articulo](#comprobar-articulo)
 	- [Crear Ordern](#crear-ordern)
+	- [Estadisitica de Articulos y Carritos](#estadisitica-de-articulos-y-carritos)
 	
 
 
@@ -558,6 +559,36 @@ Mensaje
              "quantity": {value}
              }, ...
         ]"
+   }
+}
+```
+
+
+
+## <a name='estadisitica-de-articulos-y-carritos'></a> Estadisitica de Articulos y Carritos
+[Back to top](#top)
+
+<p>Cart enviá un mensaje a Stats para asentar estadisitica de cada carrito y articulo que paso por el carrito.</p>
+
+	DIRECT stat/stat-article
+
+
+
+### Examples
+
+Mensaje
+
+```
+{
+   "type": "stat-article",
+   "queue": "cartstat",
+   "exchange": "cartstat",
+    "message": {
+        "cartId": "{cartId}",
+        "orderId": "{orderId}",
+        "articleId": "{articleId}",
+        "quantity": {quantity},
+        "time": "{time}""
    }
 }
 ```

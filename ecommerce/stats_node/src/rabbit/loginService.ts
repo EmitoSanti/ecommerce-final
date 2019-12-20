@@ -6,12 +6,21 @@
 import * as env from "../server/environment";
 import { RabbitFanoutConsumer } from "./tools/fanoutConsumer";
 import * as stats from "../stats/stats";
+import { RabbitDirectConsumer } from "./tools/directConsumer";
 
 const conf = env.getConfig(process.env);
 
 interface IRabbitMessage {
     type: string;
     message: any;
+    time: Date;
+}
+
+interface ICartMessage {
+    cartId: string;
+    orderId: string;
+    articleId: string;
+    quantity: number;
     time: Date;
 }
 

@@ -40,6 +40,7 @@ Mensaje
 {
    "type": "login",
    "message": "{id logueado}"
+   "time": "{time}"
 }
 ```
 
@@ -452,17 +453,6 @@ HTTP/1.1 500 Internal Server Error
 
 
 
-### Examples
-
-Body
-
-```
-{
-  "name": "{Nombre de Usuario}",
-  "login": "{Login de usuario}",
-  "password": "{Contraseña}"
-}
-```
 
 ### Success Response
 
