@@ -232,10 +232,10 @@ Lo siguientes microservicios complementan el sistema:
 
 ### Stats
 
-- Mantiene estadísticas de Catalogo, Delivery, Pricing, etc
+- Mantiene estadísticas de Cart, Auth, etc
 - Genera reportes estadísticos y mantiene una minería de información optimizada para consultas.
-- Duplica mucha información de otros microservicios optimizando búsquedas
-- Puede leer la cola rabbit para genera información.
+- Duplica mucha información de otros microservicios optimizando búsquedas.
+- Puede consumir diferentes colas de rabbit para genera información relevante para estadisticas.
 
 ### Profile
 
