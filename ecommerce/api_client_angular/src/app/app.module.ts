@@ -29,8 +29,14 @@ import { AppComponent } from './root.component';
 import { ToolbarComponent } from './toolbar/toolbar.component';
 import { FileUploadComponent } from './tools/file.upload.component';
 import { WelcomeComponent } from './welcome/welcome.component';
-
-
+import { StatsComponent } from './stats/stats.component';
+import { StatsService } from './stats/stats.service';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatFormFieldModule, MatInputModule } from '@angular/material'
+import { MatButtonModule, MatCheckboxModule } from '@angular/material';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
+import { MatSelectModule } from '@angular/material/select';
 
 @NgModule({
   declarations: [
@@ -53,17 +59,27 @@ import { WelcomeComponent } from './welcome/welcome.component';
     UsersComponent,
     OrdersComponent,
     OrderDetailComponent,
+    StatsComponent
   ],
   imports: [
     CommonModule,
     BrowserModule,
     FormsModule,
     ReactiveFormsModule,
+    BrowserAnimationsModule,
+    MatButtonModule,
+    MatCheckboxModule,
+    MatDatepickerModule,
+    MatSelectModule,
+    MatFormFieldModule,
+    MatInputModule,
+    OwlDateTimeModule, 
+    OwlNativeDateTimeModule,
     HttpModule,
     routing,
     NgbModule.forRoot()
   ],
-  providers: [AuthService, ImageService, LoggedIn, CatalogService, CartService, OrderService],
+  providers: [AuthService, ImageService, LoggedIn, CatalogService, CartService, OrderService, StatsService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

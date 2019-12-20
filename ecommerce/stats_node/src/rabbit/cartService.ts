@@ -37,7 +37,7 @@ export function init() {
  *             "orderId": "{orderId}",
  *             "articleId": "{articleId}",
  *             "quantity": {quantity},
- *             "time": "{time}""
+ *             "time": "{time}"
  *        }
  *     }
  */

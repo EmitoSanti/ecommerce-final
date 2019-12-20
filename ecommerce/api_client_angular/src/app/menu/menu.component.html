@@ -29,5 +29,9 @@
 	<h6 style="padding-left: 10px;padding-top: 10px;">Ordenes</h6>
 	<a [routerLink]="['/orders']" class="btn btn-sm btn-link" style="text-align: left">Ordenes</a>
 	<a [routerLink]="['/order_details']" class="btn btn-sm btn-link" style="text-align: left">Buscar</a>
-
+	<div *ngIf="usuarioLogueado.permissions[0] == 'admin'">
+		<h6 style="padding-left: 10px;padding-top: 10px;">Estadisticas</h6>
+		<a [routerLink]="['/stats']" class="btn btn-sm btn-link" style="text-align: left">Stats</a>
+		<a [routerLink]="['/stats_history']" class="btn btn-sm btn-link" style="text-align: left">Historial</a>
+	</div>
 </div>

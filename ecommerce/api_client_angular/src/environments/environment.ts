@@ -9,6 +9,7 @@ export const environment = {
   catalogServerUrl : 'http://localhost:3002/v1/',
   cartServerUrl : 'http://localhost:3003/v1/',
   orderServerUrl: 'http://localhost:3004/v1/',
+  statsServerUrl: 'http://localhost:3008/v1/',
 };
 
 /*

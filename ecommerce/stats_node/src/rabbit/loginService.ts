@@ -28,11 +28,6 @@ export function init() {
     const fanout = new RabbitFanoutConsumer("auth");
     fanout.addProcessor("login", processLogin);
     fanout.init();
-
-    console.log("addProcessor");
-    const cart = new RabbitDirectConsumer("cartstat", "cartstat");
-    cart.addProcessor("stat-article", processStatCart);
-    cart.init();
 }
 
 /**
@@ -52,28 +47,4 @@ export function processLogin(rabbitMessage: IRabbitMessage) {
     // stats.createUserStats(rabbitMessage.message, rabbitMessage.time);
     stats.addUserStats("login", rabbitMessage.time);
     console.log("RabbitMQ Consume login " + rabbitMessage.message + " " + rabbitMessage.time);
-}
-
-/**
- * @api {direct} cart/stat-article Para Estadisitica de Articulos y Carritos
- * @apiGroup RabbitMQ GET
- *
- * @apiDescription Escucha de mensajes stat-article desde cart. Para Estadisitica de Articulos y Carritos
- *
- * @apiSuccessExample {json} Mensaje
- *     {
- *        "type": "stat-article",
- *        "message": {
- *             "referenceId": "{cartId}",
- *             "orderId": "{orderId}",
- *             "articleId": "{articleId}",
- *             "quantity": {quantity},
- *             "time": "{time}""
- *        }
- *     }
- */
-function processStatCart(rabbitMessage: IRabbitMessage) {
-    const stat = rabbitMessage.message as ICartMessage;
-    console.log("processStatCart mensaje: " + JSON.stringify(stat));
-    stats.addCartStats(stat);
 }

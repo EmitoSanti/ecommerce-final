@@ -2,5 +2,8 @@
 
 export {
     addUserStats,
-    addCartStats
+    addCartStats,
+    getStats,
+    createHistory,
+    getHistory
 } from "./stats";

@@ -6,13 +6,13 @@ import * as env from "../server/environment";
 const conf = env.getConfig(process.env);
 
 export interface IStatsUsers extends Document {
-    typeTime: string;
-    accionUser: string;
-    countUser: number;
-    created: string;
-    updated: Date;
-    enabled: Boolean;
-    addQuantity: Function;
+  typeTime: string;
+  accionUser: string;
+  countUser: number;
+  created: string;
+  updated: Date;
+  enabled: Boolean;
+  addQuantity: Function;
 }
 
 /**

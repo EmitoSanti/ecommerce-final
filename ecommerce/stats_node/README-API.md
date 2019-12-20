@@ -3,14 +3,12 @@
 
 Microservicio de Estadistica
 
-- [Carrito](#carrito)
-	- [Agregar Artículo](#agregar-artículo)
-	- [Checkout](#checkout)
-	- [Decrementar](#decrementar)
-	- [Incrementar](#incrementar)
-	- [Obtener Carrito](#obtener-carrito)
-	- [Quitar Artículo](#quitar-artículo)
-	- [Validar Carrito](#validar-carrito)
+- [Estadistica](#estadistica)
+	- [Guardar estadistica](#guardar-estadistica)
+	- [Obtener Estadistica antigua](#obtener-estadistica-antigua)
+	
+- [Obtener_Estadisticas_Nuevas](#obtener_estadisticas_nuevas)
+	- [Obtener Estadisticas Nuevas](#obtener-estadisticas-nuevas)
 	
 - [RabbitMQ_GET](#rabbitmq_get)
 	- [Para Estadisitica de Articulos y Carritos](#para-estadisitica-de-articulos-y-carritos)
@@ -19,14 +17,14 @@ Microservicio de Estadistica
 	
 
 
-# <a name='carrito'></a> Carrito
+# <a name='estadistica'></a> Estadistica
 
-## <a name='agregar-artículo'></a> Agregar Artículo
+## <a name='guardar-estadistica'></a> Guardar estadistica
 [Back to top](#top)
 
-<p>Agregar artículos al carrito.</p>
+<p>Guardar estadistica nueva.</p>
 
-	POST /v1/cart/article
+	POST /v1/stats/history/
 
 
 
@@ -36,8 +34,67 @@ Body
 
 ```
 {
-  "articleId": "{Article Id}",
-  "quantity": {Quantity to add}
+  "stat": "{string}"
+  "labels": "{string}",
+  "datasets": [{data}],
+  "updated": "{Fecha ultima actualización}",
+  "created": "{Fecha creado}"
+}
+```
+
+### Success Response
+
+Respuesta
+
+```
+HTTP/1.1 200 OK
+{
+  "menssage": "{string}"
+}
+```
+
+
+### Error Response
+
+400 Bad Request
+
+```
+HTTP/1.1 400 Bad Request
+{
+   "messages" : [
+     {
+       "path" : "{Nombre de la propiedad}",
+       "message" : "{Motivo del error}"
+     },
+     ...
+  ]
+}
+```
+500 Server Error
+
+```
+HTTP/1.1 500 Internal Server Error
+{
+   "error" : "Not Found"
+}
+```
+## <a name='obtener-estadistica-antigua'></a> Obtener Estadistica antigua
+[Back to top](#top)
+
+<p>Obtener estadistica antigua del la base de datos</p>
+
+	GET /v1/stat/history/:statID
+
+
+
+### Examples
+
+Body
+
+```
+{
+  "label": "{string}",
+  "data": [number]
 }
 ```
 
@@ -47,10 +104,9 @@ Body
 
 ```
 {
-  "userId": "{User Id}",
-  "enabled": true|false,
-  "_id": "{Id de carrito}",
-  "articles": [{Artículos}],
+  "stat": "{string}"
+  "labels": "{string}",
+  "datasets": [{data}],
   "updated": "{Fecha ultima actualización}",
   "created": "{Fecha creado}"
 }
@@ -81,12 +137,14 @@ HTTP/1.1 500 Internal Server Error
    "error" : "Not Found"
 }
 ```
-## <a name='checkout'></a> Checkout
+# <a name='obtener_estadisticas_nuevas'></a> Obtener_Estadisticas_Nuevas
+
+## <a name='obtener-estadisticas-nuevas'></a> Obtener Estadisticas Nuevas
 [Back to top](#top)
 
-<p>Realiza el checkout del carrito.</p>
+<p>Devuelve las estadisticas requeridas</p>
 
-	POST /v1/cart/checkout
+	GET /v1/stats
 
 
 
@@ -96,269 +154,17 @@ HTTP/1.1 500 Internal Server Error
 Body
 
 ```
-HTTP/1.1 200 Ok
-```
-
-
-### Error Response
-
-400 Bad Request
-
-```
-HTTP/1.1 400 Bad Request
+HTTP/1.1 200 OK
 {
-   "messages" : [
-     {
-       "path" : "{Nombre de la propiedad}",
-       "message" : "{Motivo del error}"
-     },
-     ...
-  ]
-}
-```
-500 Server Error
-
-```
-HTTP/1.1 500 Internal Server Error
-{
-   "error" : "Not Found"
-}
-```
-## <a name='decrementar'></a> Decrementar
-[Back to top](#top)
-
-<p>Decrementa la cantidad de artículos en el cart.</p>
-
-	POST /v1/cart/article/:articleId/decrement
-
-
-
-
-### Success Response
-
-Body
-
-```
-{
-  "articleId": "{Article Id}",
-  "quantity": {articles to decrement}
-}
-```
-Body
-
-```
-{
-  "userId": "{User Id}",
+  "objId": "true|false",
+  "collection": "{collection de la BD}",
+  "typeTime": "{Filtro de por tiempo}",
+  "accion": "{accion de auth}",
+  "countObj": {Filtro por cantidad minima por articulo},
+  "created": "{Fecha de Inicio}",
+  "timeEnd": "{Fecha de finalizacion}",
   "enabled": true|false,
-  "_id": "{Id de carrito}",
-  "articles": [{Artículos}],
-  "updated": "{Fecha ultima actualización}",
-  "created": "{Fecha creado}"
 }
-```
-
-
-### Error Response
-
-400 Bad Request
-
-```
-HTTP/1.1 400 Bad Request
-{
-   "messages" : [
-     {
-       "path" : "{Nombre de la propiedad}",
-       "message" : "{Motivo del error}"
-     },
-     ...
-  ]
-}
-```
-500 Server Error
-
-```
-HTTP/1.1 500 Internal Server Error
-{
-   "error" : "Not Found"
-}
-```
-## <a name='incrementar'></a> Incrementar
-[Back to top](#top)
-
-<p>Incrementa la cantidad de artículos en el cart.</p>
-
-	POST /v1/cart/article/:articleId/increment
-
-
-
-
-### Success Response
-
-Body
-
-```
-{
-  "articleId": "{Article Id}",
-  "quantity": {articles to increment},
-  "validated": True|False Determina si el articulo se valido en catalog
-}
-```
-Body
-
-```
-{
-  "userId": "{User Id}",
-  "enabled": true|false,
-  "_id": "{Id de carrito}",
-  "articles": [{Artículos}],
-  "updated": "{Fecha ultima actualización}",
-  "created": "{Fecha creado}"
-}
-```
-
-
-### Error Response
-
-400 Bad Request
-
-```
-HTTP/1.1 400 Bad Request
-{
-   "messages" : [
-     {
-       "path" : "{Nombre de la propiedad}",
-       "message" : "{Motivo del error}"
-     },
-     ...
-  ]
-}
-```
-500 Server Error
-
-```
-HTTP/1.1 500 Internal Server Error
-{
-   "error" : "Not Found"
-}
-```
-## <a name='obtener-carrito'></a> Obtener Carrito
-[Back to top](#top)
-
-<p>Devuelve el carrito activo.</p>
-
-	GET /v1/cart
-
-
-
-
-### Success Response
-
-Body
-
-```
-{
-  "userId": "{User Id}",
-  "enabled": true|false,
-  "_id": "{Id de carrito}",
-  "articles": [{Artículos}],
-  "updated": "{Fecha ultima actualización}",
-  "created": "{Fecha creado}"
-}
-```
-
-
-### Error Response
-
-400 Bad Request
-
-```
-HTTP/1.1 400 Bad Request
-{
-   "messages" : [
-     {
-       "path" : "{Nombre de la propiedad}",
-       "message" : "{Motivo del error}"
-     },
-     ...
-  ]
-}
-```
-500 Server Error
-
-```
-HTTP/1.1 500 Internal Server Error
-{
-   "error" : "Not Found"
-}
-```
-## <a name='quitar-artículo'></a> Quitar Artículo
-[Back to top](#top)
-
-<p>Eliminar un articulo del carrito.</p>
-
-	DELETE /cart/article/:articleId
-
-
-
-
-### Success Response
-
-Body
-
-```
-HTTP/1.1 200 Ok
-```
-
-
-### Error Response
-
-400 Bad Request
-
-```
-HTTP/1.1 400 Bad Request
-{
-   "messages" : [
-     {
-       "path" : "{Nombre de la propiedad}",
-       "message" : "{Motivo del error}"
-     },
-     ...
-  ]
-}
-```
-500 Server Error
-
-```
-HTTP/1.1 500 Internal Server Error
-{
-   "error" : "Not Found"
-}
-```
-## <a name='validar-carrito'></a> Validar Carrito
-[Back to top](#top)
-
-<p>Realiza una validación completa del cart, para realizar el checkout.</p>
-
-	POST /v1/cart/validate
-
-
-
-
-### Success Response
-
-Body
-
-```
-{
-   "errors": [
-       {  "articleId": "{Article}",
-          "message" : "{Error message}"
-       }, ...],
-   "warnings": [
-       {  "articleId": "{Article}",
-          "message" : "{Error message}"
-       }, ...]
- }
 ```
 
 
@@ -410,7 +216,7 @@ Mensaje
         "orderId": "{orderId}",
         "articleId": "{articleId}",
         "quantity": {quantity},
-        "time": "{time}""
+        "time": "{time}"
    }
 }
 ```
