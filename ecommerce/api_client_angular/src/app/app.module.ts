@@ -31,12 +31,14 @@ import { FileUploadComponent } from './tools/file.upload.component';
 import { WelcomeComponent } from './welcome/welcome.component';
 import { StatsComponent } from './stats/stats.component';
 import { StatsService } from './stats/stats.service';
+import { StatsHistoryComponent } from './stats/stats.history.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatFormFieldModule, MatInputModule } from '@angular/material'
 import { MatButtonModule, MatCheckboxModule } from '@angular/material';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
 import { MatSelectModule } from '@angular/material/select';
+import { MatListModule } from '@angular/material/list';
 
 @NgModule({
   declarations: [
@@ -59,7 +61,8 @@ import { MatSelectModule } from '@angular/material/select';
     UsersComponent,
     OrdersComponent,
     OrderDetailComponent,
-    StatsComponent
+    StatsComponent,
+    StatsHistoryComponent
   ],
   imports: [
     CommonModule,
@@ -73,6 +76,7 @@ import { MatSelectModule } from '@angular/material/select';
     MatSelectModule,
     MatFormFieldModule,
     MatInputModule,
+    MatListModule,
     OwlDateTimeModule, 
     OwlNativeDateTimeModule,
     HttpModule,

@@ -287,6 +287,7 @@ export async function getStats(data: StatQuery) {
                         count.push(re.countUser);
                     });
                     const clear = {
+                        title: data.collection + data.accion + data.typeTime,
                         labels: [lab],
                         datasets: [{
                             label: data.accion,
@@ -318,6 +319,7 @@ export async function getStats(data: StatQuery) {
                         count.push(re.countArticles);
                     });
                     const clear = {
+                        title: data.collection + data.accion + data.typeTime,
                         labels: [lab],
                         datasets: [{
                             label: data.created,
@@ -352,6 +354,7 @@ export async function getStats(data: StatQuery) {
                         count.push(re.countArticle);
                     });
                     const clear = {
+                        title: data.collection + " " + data.accion + " " + data.typeTime,
                         labels: [lab],
                         datasets: [{
                             label: data.typeTime,

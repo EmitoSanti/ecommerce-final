@@ -80,7 +80,9 @@
 <div>
     <button class="btn btn-primary " (click)="runGraf()" [disabled]="selectedMoments.length === 0">Graficar</button>
 </div>
-
+<div>
+    <button class="btn btn-primary " (click)="saveStat()" [disabled]="isSave">Guardar Estadistica</button>
+</div>
 <div *ngIf="chart">
     <canvas id="canvas">{{ chart }}</canvas>
 </div>

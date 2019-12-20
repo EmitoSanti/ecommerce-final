@@ -26,26 +26,8 @@ const StatsHistorySchema = new Schema({
     type: String,
     required: "La estadistica debe tener titulo"
   },
-  labels: {
-    type: [
-      {
-        type: String,
-      }
-    ]
-  },
-  datasets: [{
-    label: {
-        type: String,
-        required: "Datasets Label requerido"
-    },
-    data: {
-        type: [
-            {
-              type: String,
-            }
-        ]
-    }
-  }],
+  labels: Schema.Types.Mixed,
+  datasets: Schema.Types.Mixed,
   created: {
     type: Date,
     default: Date.now()

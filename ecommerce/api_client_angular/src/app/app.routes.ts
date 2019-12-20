@@ -16,7 +16,7 @@ import { UsersComponent } from './auth/users.component';
 import { OrdersComponent } from './orders/orders.component';
 import { OrderDetailComponent } from './orders/order.detail.component';
 import { StatsComponent } from './stats/stats.component';
-
+import { StatsHistoryComponent } from './stats/stats.history.component';
 
 @Injectable()
 export class LoggedIn implements CanActivate {
@@ -55,6 +55,7 @@ export const routes: Routes = [
     { path: 'order_details/:id', component: OrderDetailComponent, canActivate: [LoggedIn] },
     { path: 'order_details', component: OrderDetailComponent, canActivate: [LoggedIn] },
     { path: 'stats', component: StatsComponent, canActivate: [LoggedIn] },
+    { path: 'stats_history', component: StatsHistoryComponent, canActivate: [LoggedIn] },
 ];
 
 export const routing: ModuleWithProviders = RouterModule.forRoot(routes);

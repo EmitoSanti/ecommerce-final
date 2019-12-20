@@ -36,7 +36,7 @@ Body
 {
   "stat": "{string}"
   "labels": "{string}",
-  "datasets": [{data}],
+  "datasets": [{label: {string}, [data: {number}]}],
   "updated": "{Fecha ultima actualización}",
   "created": "{Fecha creado}"
 }
@@ -83,7 +83,7 @@ HTTP/1.1 500 Internal Server Error
 
 <p>Obtener estadistica antigua del la base de datos</p>
 
-	GET /v1/stat/history/:statID
+	GET /v1/stat/history/
 
 
 

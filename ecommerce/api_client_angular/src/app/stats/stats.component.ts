@@ -15,6 +15,8 @@ export class StatsComponent extends BasicFromGroupController implements OnInit {
     @Input()
     chart = [];
     query: StatQuery;
+    
+    isSave: boolean = true;
     constructor(private statService: StatsService, private router: Router) {
         super();
     }
@@ -36,6 +38,7 @@ export class StatsComponent extends BasicFromGroupController implements OnInit {
     countObjValue: number = 1;
     timeStart: string;
     timeEnd: string;
+    forSaveStat: any = {};
 
     runGraf() {
         if (this.typeTimeValue === "minutos") {
@@ -59,7 +62,8 @@ export class StatsComponent extends BasicFromGroupController implements OnInit {
         console.log("this.query: "+ JSON.stringify(this.query));
         this.statService.getStat(this.query)
             .then(stat => {
-                //this.stat = stat;
+                this.forSaveStat = JSON.stringify(stat);
+                console.log("this.forSaveStat: " + JSON.stringify(this.forSaveStat));
                 this.renderGraf(stat);
             })
             .catch(err => this.processRestValidations(err));
@@ -67,6 +71,7 @@ export class StatsComponent extends BasicFromGroupController implements OnInit {
 
     renderGraf(stat: Stat) {
         console.log("renderGraf: " + JSON.stringify(stat));
+        this.isSave = false;
         this.chart = new Chart('canvas', {
             type: 'bar',
             data: {
@@ -74,5 +79,12 @@ export class StatsComponent extends BasicFromGroupController implements OnInit {
                 datasets: stat.datasets
             }
         });
+    }
+
+    saveStat() {
+        console.log("saveStat() " + JSON.stringify(this.forSaveStat));
+        this.statService.saveStat(this.forSaveStat)
+            .then()
+            .catch(err => this.processRestValidations(err));        
     }
 }

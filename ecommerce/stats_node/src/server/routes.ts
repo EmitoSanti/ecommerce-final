@@ -11,9 +11,9 @@ import { NextFunction } from "connect";
  * Modulo de seguridad, login/logout, cambio de contraseñas, etc
  */
 export function init(app: Express) {
-  app.route("/v1/stats").get(getStatS, getStatS);
-  app.route("/v1/cart/history").post(validateToken, createHistory);
-  app.route("/v1/cart/history/:id").get(getStatS, getHistory);
+  app.route("/v1/stats").get(validateToken, getStatS);
+  app.route("/v1/stats/createhistory").post(createHistory, createHistory);
+  app.route("/v1/stats/history").get(validateToken, getHistory);
 }
 
 interface IUserSessionRequest extends express.Request {
@@ -89,7 +89,7 @@ function getStatS(req: IUserSessionRequest, res: express.Response) {
  *    {
  *      "stat": "{string}"
  *      "labels": "{string}",
- *      "datasets": [{data}],
+ *      "datasets": [{label: {string}, [data: {number}]}],
  *      "updated": "{Fecha ultima actualización}",
  *      "created": "{Fecha creado}"
  *    }
@@ -115,7 +115,7 @@ async function createHistory(req: IUserSessionRequest, res: express.Response) {
 }
 
 /**
- * @api {get} /v1/stat/history/:statID Obtener Estadistica antigua
+ * @api {get} /v1/stat/history/ Obtener Estadistica antigua
  * @apiName Obtener Estadistica antigua
  * @apiGroup Estadistica
  *
