@@ -14,7 +14,7 @@
     </div>
 
     <div layout=”row”>
-        <section class="example-section" *ngIf="collectionValue !== 'usuarios'"> 
+        <section class="example-section" *ngIf="false"> 
             <mat-checkbox class="example-margin" [(ngModel)]="porID">Por ID?</mat-checkbox>
         </section>
     </div>
@@ -52,7 +52,9 @@
                 </mat-option>
             </mat-select>
         </mat-form-field>
-        Ingrese otro maximo: <input matInput type="text" placeholder="Numero input" [(ngModel)]="countObjValue">
+        Ingrese otro maximo: 
+        <input matInput type="text" placeholder="Numero input" [(ngModel)]="countObjValue"
+            style="width: 100px; vertical-align: middle;">
     </div>
 </div>
 
@@ -83,8 +85,7 @@
 <div>
     <button class="btn btn-primary " (click)="saveStat()" [disabled]="isSave">Guardar Estadistica</button>
 </div>
+<div *ngIf="errorMessage">{{errorMessage}}</div>
 <div *ngIf="chart">
     <canvas id="canvas">{{ chart }}</canvas>
 </div>
-
-<div *ngIf="errorMessage">{{errorMessage}}</div>

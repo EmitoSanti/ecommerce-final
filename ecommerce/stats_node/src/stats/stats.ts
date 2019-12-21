@@ -59,7 +59,7 @@ export async function addUserStats(accion: string, time: Date): Promise<void> {
         console.log("lodash statsMinutes: " + _.isNull(statsMinutes) + " " + statsMinutes);
         if (!_.isNull(statsMinutes)) {
             console.log("save statsMinutes : " + statsMinutes);
-            statsMinutes.addQuantity();
+            statsHour.countUser++;
             // Save the Stat User
             await statsMinutes.save();
             console.log("Save statsMinutes: " + JSON.stringify(statsMinutes));
@@ -71,7 +71,7 @@ export async function addUserStats(accion: string, time: Date): Promise<void> {
         console.log("lodash statsHour: " + _.isNull(statsHour) + " " + statsHour);
         if (!_.isNull(statsHour)) {
             console.log("save statsHour : " + statsHour);
-            statsHour.addQuantity();
+            statsHour.countUser++;
             // Save the Stat User
             await statsHour.save();
             console.log("Save statsHour: " + JSON.stringify(statsHour));
@@ -135,7 +135,7 @@ export async function addArticleStats(id: string, time: Date): Promise<void> {
         console.log("lodash statsMinutes: " + _.isNull(statsMinutes) + " " + statsMinutes);
         if (!_.isNull(statsMinutes)) {
             console.log("save statsMinutes : " + statsMinutes);
-            statsMinutes.addQuantity();
+            statsMinutes.countArticle++;
             // Save the Stat Article
             await statsMinutes.save();
             console.log("Save statsMinutes: " + JSON.stringify(statsMinutes));
@@ -147,7 +147,8 @@ export async function addArticleStats(id: string, time: Date): Promise<void> {
         console.log("lodash statsHour: " + _.isNull(statsHour) + " " + statsHour);
         if (!_.isNull(statsHour)) {
             console.log("save statsHour : " + statsHour);
-            statsHour.addQuantity();
+            // statsHour.addQuantity();
+            statsHour.countArticle++;
             // Save the Stat Article
             await statsHour.save();
             console.log("Save statsHour: " + JSON.stringify(statsHour));
@@ -210,7 +211,7 @@ export async function addCartStats(cart: Cart): Promise<void> {
         if (!_.isNull(statsHour)) {
             console.log("save statsHour : " + statsHour);
             if (cart.articleId) {
-                statsHour.addQuantity(cart.quantity);
+                statsHour.countArticles++;
                 addArticleStats(cart.articleId, cart.time);
             } else {
                 // statsHour.decrementQuantity();

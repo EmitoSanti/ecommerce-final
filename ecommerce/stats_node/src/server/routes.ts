@@ -87,7 +87,7 @@ function getStatS(req: IUserSessionRequest, res: express.Response) {
  *
  * @apiExample {json} Body
  *    {
- *      "stat": "{string}"
+ *      "title": "{string}"
  *      "labels": "{string}",
  *      "datasets": [{label: {string}, [data: {number}]}],
  *      "updated": "{Fecha ultima actualización}",
